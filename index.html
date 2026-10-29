@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everyday Task Manager</title>
+<style>
+:root{--ink:#202744;--muted:#737b94;--paper:#fff;--line:#e8eaf4;--primary:#6558e8;--primary2:#9364f3;--bg:#f5f6ff;--green:#159b75;--red:#d64c68;--shadow:0 16px 45px rgba(55,50,120,.09)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#e8e9ff 0,transparent 32%),radial-gradient(circle at 100% 20%,#e3f7f3 0,transparent 26%),var(--bg);font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--ink);line-height:1.5}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.hero{position:relative;overflow:hidden;padding:34px 20px 62px;color:#fff;background:linear-gradient(120deg,#5146d8,#8060ed 62%,#a16be9)}.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:#ffffff12}.hero:before{width:250px;height:250px;right:-55px;top:-100px}.hero:after{width:150px;height:150px;right:170px;bottom:-100px}
+.hero-inner{max-width:1050px;margin:auto;position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:14px}.brand-icon{width:58px;height:58px;display:grid;place-items:center;border:1px solid #ffffff60;background:#ffffff20;border-radius:18px;font-size:28px}h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.15;margin:0 0 8px;letter-spacing:-.7px}.hero p{margin:0;color:#eeebff}.date-pill{background:#ffffff20;border:1px solid #ffffff45;padding:10px 14px;border-radius:999px;font-size:.9rem;white-space:nowrap}
+main{width:min(1050px,calc(100% - 30px));margin:-34px auto 0;position:relative;z-index:2}.panel{background:var(--paper);border:1px solid #ececf7;border-radius:22px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-title{display:flex;align-items:center;gap:10px;margin:0 0 18px;font-size:1.12rem}.emoji{display:grid;place-items:center;width:35px;height:35px;background:#f0efff;border-radius:11px;font-size:18px}
+.form-grid{display:grid;grid-template-columns:minmax(0,1fr) 170px 170px auto;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:.78rem;color:var(--muted);font-weight:750;letter-spacing:.35px}input,select,textarea{width:100%;min-width:0;padding:12px 13px;border:1px solid #dfe2f0;background:#fbfbff;color:var(--ink);border-radius:12px;outline:none;transition:border .2s,box-shadow .2s}input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px #6558e81a}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:750;transition:transform .15s,filter .15s}.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}.btn-primary{align-self:end;color:#fff;background:linear-gradient(120deg,var(--primary),var(--primary2));box-shadow:0 7px 16px #6558e833}.message{min-height:20px;margin:10px 0 0;color:var(--red);font-size:.88rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.stat{position:relative;overflow:hidden;border-radius:19px;padding:17px 18px;background:#fff;border:1px solid #ececf7;box-shadow:var(--shadow)}.stat:after{content:"";position:absolute;width:80px;height:80px;right:-22px;top:-28px;border-radius:50%;background:var(--tint)}.stat-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:.86rem;font-weight:650}.stat-icon{width:34px;height:34px;display:grid;place-items:center;background:var(--tint);border-radius:11px;font-size:17px}.stat strong{display:block;font-size:1.9rem;letter-spacing:-1px;margin-top:5px}.stat small{color:var(--muted)}.stat.total{--tint:#eeedff}.stat.pending{--tint:#fff1d9}.stat.done{--tint:#dcf8ee}.stat.overdue{--tint:#ffe8ee}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}.toolbar .panel-title{margin:0}.filters{display:flex;gap:9px;align-items:center}.filters select{max-width:190px;padding:10px 12px}.progress-wrap{margin:18px 0 15px}.progress-label{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--muted);margin-bottom:8px}.progress-track{height:8px;background:#efeff8;border-radius:99px;overflow:hidden}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#19b58a,#61d6ad);border-radius:99px;transition:width .25s}
+.task-list{list-style:none;padding:0;margin:0}.task-item{display:flex;align-items:center;gap:12px;padding:14px 12px;border:1px solid var(--line);border-radius:15px;margin-top:10px;background:#fff;transition:transform .15s,border .15s}.task-item:hover{transform:translateY(-1px);border-color:#d5d1ff}.task-check{width:19px;height:19px;flex:0 0 auto;accent-color:var(--green)}.task-content{min-width:0;flex:1}.task-title{font-weight:750;overflow-wrap:anywhere}.task-description{font-size:.86rem;color:#626b84;margin-top:3px;overflow-wrap:anywhere;white-space:pre-wrap}.task-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--muted);font-size:.78rem;margin-top:6px}.badge{padding:3px 8px;border-radius:999px;background:#f0efff;color:#5a4dd1;font-size:.72rem;font-weight:750}.priority-high{background:#ffe8ed;color:#bb3856}.priority-medium{background:#fff1d9;color:#97600b}.priority-low{background:#dcf8ee;color:#087b59}.completed .task-title{color:#8b92a8;text-decoration:line-through}.completed{background:#fbfdfc}.overdue-text{color:var(--red);font-weight:750}.delete-btn{border:1px solid #ffe0e6;color:var(--red);background:#fff5f7;border-radius:10px;padding:8px 10px;font-weight:700}.delete-btn:hover{background:#ffe7ed}.empty{padding:34px 15px;text-align:center;color:var(--muted)}.empty-icon{font-size:34px;margin-bottom:6px}.footer{text-align:center;padding:6px 15px 30px;color:var(--muted);font-size:.85rem}.footer strong{color:#5f56c9}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:850px){.form-grid{grid-template-columns:1fr 1fr}.btn-primary{width:100%}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.hero{padding:27px 16px 57px}.date-pill{display:none}main{width:calc(100% - 22px)}.panel{padding:17px;border-radius:18px}.form-grid{grid-template-columns:1fr}.stats{gap:9px}.stat{padding:13px 11px;border-radius:15px}.stat-top{font-size:.75rem}.stat-icon{width:29px;height:29px;font-size:14px}.stat strong{font-size:1.6rem}.stat small{font-size:.72rem}.toolbar{align-items:flex-start;flex-direction:column}.filters{width:100%;flex-wrap:wrap}.filters select{max-width:none;flex:1;min-width:130px}.task-item{padding:12px 8px;gap:8px}.delete-btn{padding:7px 8px;font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner">
+  <div class="brand"><div class="brand-icon" aria-hidden="true">✓</div><div><h1>Everyday Task Manager</h1><p>Plan your day. Focus on what matters. Get things done. ✨</p></div></div>
+  <div class="date-pill" id="todayLabel">📅 Your workspace</div>
+</div></header>
+<main>
+<section class="panel" aria-labelledby="addHeading">
+  <h2 class="panel-title" id="addHeading"><span class="emoji" aria-hidden="true">✍️</span> Create a task</h2>
+  <form id="taskForm" class="form-grid">
+    <div class="field"><label for="taskInput">TASK NAME *</label><input id="taskInput" type="text" maxlength="100" placeholder="e.g. Finish report, buy groceries..." required></div>
+    <div class="field"><label for="categoryInput">CATEGORY</label><select id="categoryInput"><option>Personal</option><option>Work</option><option>Study</option><option>Home</option><option>Health</option><option>Errands</option><option>Other</option></select></div>
+    <div class="field"><label for="priorityInput">PRIORITY</label><select id="priorityInput"><option value="Medium">🟡 Medium</option><option value="High">🔴 High</option><option value="Low">🟢 Low</option></select></div>
+    <button class="btn btn-primary" type="submit">＋ Add Task</button>
+  </form>
+  <div class="field" style="margin-top:12px"><label for="descriptionInput">NOTES (OPTIONAL)</label><input id="descriptionInput" type="text" maxlength="240" placeholder="Add a short note or details..."></div>
+  <p id="formMessage" class="message" role="status" aria-live="polite"></p>
+</section>
+
+<section class="stats" aria-label="Task summary">
+  <article class="stat total"><div class="stat-top"><span>Total tasks</span><span class="stat-icon">📋</span></div><strong id="totalCount">0</strong><small>Everything on your list</small></article>
+  <article class="stat pending"><div class="stat-top"><span>Pending</span><span class="stat-icon">⏳</span></div><strong id="pendingCount">0</strong><small>Still to do</small></article>
+  <article class="stat done"><div class="stat-top"><span>Completed</span><span class="stat-icon">🎉</span></div><strong id="completedCount">0</strong><small>Well done!</small></article>
+  <article class="stat overdue"><div class="stat-top"><span>High priority</span><span class="stat-icon">🔥</span></div><strong id="highCount">0</strong><small>Needs extra attention</small></article>
+</section>
+
+<section class="panel" aria-labelledby="tasksHeading">
+  <div class="toolbar">
+    <h2 class="panel-title" id="tasksHeading"><span class="emoji" aria-hidden="true">🗂️</span> Your tasks</h2>
+    <div class="filters">
+      <label><span class="sr-only">Filter by status</span><select id="filterInput" aria-label="Filter by status"><option value="all">All statuses</option><option value="pending">⏳ Pending</option><option value="completed">✅ Completed</option></select></label>
+      <label><span class="sr-only">Filter by category</span><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option>Personal</option><option>Work</option><option>Study</option><option>Home</option><option>Health</option><option>Errands</option><option>Other</option></select></label>
+    </div>
+  </div>
+  <div class="progress-wrap"><div class="progress-label"><span>Overall completion</span><strong id="progressText">0%</strong></div><div class="progress-track" role="progressbar" aria-label="Task completion progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack"><div class="progress-bar" id="progressBar"></div></div></div>
+  <ul id="taskList" class="task-list"></ul>
+  <div id="emptyMessage" class="empty"><div class="empty-icon">🌱</div><strong>Your workspace is ready!</strong><div>Add your first task and make today count.</div></div>
+</section>
+</main>
+<footer class="footer">A simple workspace for <strong>work · home · study · everyday life</strong></footer>
+
+<script>
+const taskForm=document.getElementById("taskForm");
+const taskInput=document.getElementById("taskInput");
+const categoryInput=document.getElementById("categoryInput");
+const priorityInput=document.getElementById("priorityInput");
+const descriptionInput=document.getElementById("descriptionInput");
+const filterInput=document.getElementById("filterInput");
+const categoryFilter=document.getElementById("categoryFilter");
+const taskList=document.getElementById("taskList");
+const formMessage=document.getElementById("formMessage");
+const emptyMessage=document.getElementById("emptyMessage");
+document.getElementById("todayLabel").textContent="📅 "+new Date().toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+let tasks=loadTasks();
+
+function loadTasks(){try{return JSON.parse(localStorage.getItem("everydayTasks"))||[]}catch(error){return []}}
+function saveTasks(){localStorage.setItem("everydayTasks",JSON.stringify(tasks))}
+function updateSummary(){
+  const completed=tasks.filter(task=>task.completed).length;
+  document.getElementById("totalCount").textContent=tasks.length;
+  document.getElementById("pendingCount").textContent=tasks.length-completed;
+  document.getElementById("completedCount").textContent=completed;
+  document.getElementById("highCount").textContent=tasks.filter(task=>task.priority==="High"&&!task.completed).length;
+  const percent=tasks.length?Math.round(completed/tasks.length*100):0;
+  document.getElementById("progressText").textContent=percent+"%";
+  document.getElementById("progressBar").style.width=percent+"%";
+  document.getElementById("progressTrack").setAttribute("aria-valuenow",percent);
+}
+function renderTasks(){
+  taskList.replaceChildren();
+  const status=filterInput.value,category=categoryFilter.value;
+  const visible=tasks.filter(task=>(status==="all"||(status==="pending"&&!task.completed)||(status==="completed"&&task.completed))&&(category==="all"||task.category===category));
+  emptyMessage.hidden=visible.length!==0;
+  if(tasks.length>0&&visible.length===0){emptyMessage.hidden=false;emptyMessage.innerHTML='<div class="empty-icon">🔎</div><strong>No matching tasks</strong><div>Try a different status or category filter.</div>'}
+  else if(tasks.length===0){emptyMessage.innerHTML='<div class="empty-icon">🌱</div><strong>Your workspace is ready!</strong><div>Add your first task and make today count.</div>'}
+  visible.forEach(task=>{
+    const item=document.createElement("li");item.className="task-item"+(task.completed?" completed":"");
+    const check=document.createElement("input");check.type="checkbox";check.className="task-check";check.checked=task.completed;check.setAttribute("aria-label","Mark "+task.title+" completed");check.addEventListener("change",()=>toggleTask(task.id));
+    const content=document.createElement("div");content.className="task-content";
+    const title=document.createElement("div");title.className="task-title";title.textContent=task.title;
+    content.append(title);
+    if(task.description){const desc=document.createElement("div");desc.className="task-description";desc.textContent=task.description;content.append(desc)}
+    const meta=document.createElement("div");meta.className="task-meta";
+    const cat=document.createElement("span");cat.className="badge";cat.textContent=task.category;
+    const pri=document.createElement("span");pri.className="badge priority-"+task.priority.toLowerCase();pri.textContent=task.priority+" priority";
+    const date=document.createElement("span");date.textContent="Added "+task.date;
+    meta.append(cat,pri,date);content.append(meta);
+    const del=document.createElement("button");del.type="button";del.className="delete-btn";del.textContent="Delete";del.setAttribute("aria-label","Delete "+task.title);del.addEventListener("click",()=>deleteTask(task.id));
+    item.append(check,content,del);taskList.append(item);
+  });
+  updateSummary();
+}
+taskForm.addEventListener("submit",event=>{
+  event.preventDefault();const title=taskInput.value.trim();
+  if(!title){formMessage.textContent="Please enter a task name.";taskInput.focus();return}
+  tasks.unshift({id:Date.now()+Math.random(),title,description:descriptionInput.value.trim(),category:categoryInput.value,priority:priorityInput.value,completed:false,date:new Date().toLocaleDateString()});
+  saveTasks();renderTasks();taskForm.reset();formMessage.textContent="✨ Task added successfully!";taskInput.focus();
+});
+function toggleTask(id){tasks=tasks.map(task=>task.id===id?{...task,completed:!task.completed}:task);saveTasks();renderTasks();formMessage.textContent=""}
+function deleteTask(id){tasks=tasks.filter(task=>task.id!==id);saveTasks();renderTasks();formMessage.textContent="Task deleted."}
+filterInput.addEventListener("change",renderTasks);categoryFilter.addEventListener("change",renderTasks);taskInput.addEventListener("input",()=>{formMessage.textContent=""});
+renderTasks();
+</script>
+</body>
+</html>
